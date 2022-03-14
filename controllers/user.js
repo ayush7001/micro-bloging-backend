@@ -101,6 +101,17 @@ class UserController {
             responseGenerator.sendError(res, error);
         }
     }
+
+    async uploadComment(req, res) {
+        try {
+            const comment = req.body.comment;
+            const blogId = req.params.id;
+            const uploadComment = await userHelper.uploadComment(comment, blogId);
+            responseGenerator.sendResponse(res, { message: 'Comment is added successfully' }); 
+        } catch (error) {
+            responseGenerator.sendError(res, error);
+        }
+    }
 }
 
 module.exports = new UserController();

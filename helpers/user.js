@@ -29,7 +29,7 @@ class UserHelper {
                
                 let blogDetail = await this.getBlog(id)
                const note = {blogTitle: noteBody.blogTitle,
-                blogContent: noteBody.blogContent, likes: blogDetail.likes, authorName: blogDetail.authorName, authorEmail: blogDetail.authorEmail}
+                blogContent: noteBody.blogContent, likes: blogDetail.likes, authorName: blogDetail.authorName, authorEmail: blogDetail.authorEmail, comments: blogDetail.comments}
                 console.log(note)
                 const updatedNote = await Blogs.updateOne({_id: id}, note);
                 if(updatedNote.n > 0) {
@@ -48,13 +48,33 @@ class UserHelper {
             try {
                 let blogDetail = await this.getBlog(id)
                 const note = {blogTitle: blogDetail.blogTitle,
-                    blogContent: blogDetail.blogContent, likes: noteBody.likes, authorName: blogDetail.authorName, authorEmail: blogDetail.authorEmail}
+                    blogContent: blogDetail.blogContent, likes: noteBody.likes, authorName: blogDetail.authorName, authorEmail: blogDetail.authorEmail, comments: blogDetail.comments}
                 const updatedNote = await Blogs.updateOne({_id: id}, note);
                 if(updatedNote.n > 0) {
                     resolve(true);
                 } else {
                     resolve(null);
                 }
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
+
+    uploadComment(comment, id) {
+        return new Promise(async(resolve, reject) => {
+            try {
+                let blogDetail = await this.getBlog(id);
+                let oldComments = blogDetail.comments;
+                oldComments.push(comment)
+                const note = {blogTitle: blogDetail.blogTitle,
+                    blogContent: blogDetail.blogContent, likes: blogDetail.likes, authorName: blogDetail.authorName, authorEmail: blogDetail.authorEmail, comments: oldComments};
+                    const updatedNote = await Blogs.updateOne({_id: id}, note);
+                    if(updatedNote.n > 0) {
+                        resolve(true);
+                    } else {
+                        resolve(null);
+                    }    
             } catch (error) {
                 reject(error);
             }

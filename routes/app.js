@@ -5,6 +5,7 @@ const userController = require("../controllers/user");
 
 router.post("/blogs/add", routesValidators.verifyUser, userController.addBlog);
 router.put("/blogs/:id", routesValidators.verifyUser, userController.updateBlog);
+router.put("/blogs/:id/comment", routesValidators.verifyUser, userController.uploadComment);
 router.put("/blogs/:id/likes", routesValidators.verifyUser, userController.updateBlogLikes);
 router.get("/blogs/:id", userController.getBlog);
 router.get("/blogs", userController.listBlogs);
